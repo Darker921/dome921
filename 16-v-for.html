@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app">
+      <ul>
+        <li v-for="item in list">{{item}}</li>
+      </ul>
+      <hr />
+      <ul>
+        <li v-for="(item, index) in list">{{item}} 和 {{index}}</li>
+      </ul>
+      <hr />
+      <ul>
+        <li v-for="(item, index) in list2">{{index}}</li>
+      </ul>
+      <hr />
+      <!-- 遍历对象展示(了解)  prop属性名 value属性值 -->
+      <ul>
+        <li v-for="(value, prop) in obj">{{ prop }} : {{ value }}</li>
+      </ul>
+    </div>
+
+    <script src="./vue.js"></script>
+    <script>
+      const vm = new Vue({
+        el: "#app",
+        data: {
+          list: ["杨玉环", "貂蝉", "西施", "王兆君"],
+          list2: [
+            "东方持国天王",
+            "南方增长天王",
+            "西方广目天王",
+            "北方多闻天王",
+          ],
+          obj: {
+            name: "九姨太",
+            age: 18,
+            desc: "温柔可爱，善解人意",
+          },
+        },
+      });
+    </script>
+  </body>
+</html>
