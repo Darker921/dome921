@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app">{{ msg | global |demo }}</div>
+
+    <div id="app2">{{ msg | global |demo }}</div>
+
+    <script src="./vue.js"></script>
+    <script>
+      //全局过滤器
+      Vue.filter("global", function (value) {
+        return value + "_global";
+      });
+
+      const vm = new Vue({
+        //el指定视图 data指定数据  methods指定方法  filters指定局部过滤器
+        el: "#app",
+        data: {
+          msg: "hello vue",
+        },
+        //局部过滤器
+        filters: {
+          //过滤名：处理函数
+          demo: function (value) {
+            return value + "_demo";
+          },
+        },
+      });
+
+      const vm2 = new Vue({
+        el: "#app2",
+        data: {
+          msg: "hello vie2",
+        },
+      });
+    </script>
+  </body>
+</html>
