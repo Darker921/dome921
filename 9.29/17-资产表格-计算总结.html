@@ -23,6 +23,7 @@
       <div class="container">
         <!-- 输入框 -->
         <input
+          v-model.trim="key"
           v-autofocus
           type="text"
           class="form-control search"
@@ -39,7 +40,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(item, index) in list" :key="item.id">
+            <tr v-for="(item, index) in showList" :key="item.id">
               <td>{{ index + 1 }}</td>
               <td>{{ item.name }}</td>
               <!-- 只要 item.price > 100, 就要加上 red 类 -->
@@ -49,6 +50,9 @@
               <td><a @click="del(item.id)" href="javascript:;">删除</a></td>
             </tr>
           </tbody>
+          <tfoot>
+            <td colspan="4">{{total | money}}</td>
+          </tfoot>
         </table>
 
         <!-- 添加资产 -->
@@ -92,7 +96,14 @@
       //    (1) 给添加按钮注册点击事件, 注意: 阻止默认行为
       //    (2) 点击时, 获取到两个输入框的值 v-model和两个输入框绑定
       //    (3) 添加操作
+      // 5. 计算总价
+      //    希望得到一个结果, 且这个结果依赖于 data 中的数据, 计算得到的, 推荐使用计算属性
+      //    好处: data中依赖的数据一变化, 自动重新计算, 且会缓存
 
+      // 6. 搜索
+      // (1) 要获取搜索框的值, v-model
+      // (2) 准备一个计算属性, showList (用于展示的列表)
+      //     showList 是根据搜索关键字, 从list中过滤出来的数组, 用于展示即可
       // 定义一个过滤器, 专门用于处理金额
       Vue.filter("money", function (value) {
         return "¥ " + value.toFixed(2);
@@ -118,6 +129,7 @@
           ],
           name: "",
           price: 0,
+          key: "",
         },
         methods: {
           del(id) {
@@ -138,6 +150,28 @@
             // 清空输入框
             this.name = "";
             this.price = 0;
+          },
+        },
+        //计算属性
+        computed: {
+          total() {
+            //计算总价，将list中所有的price进行累加
+            let totalPrice = 0;
+            this.list.forEach((item) => (totalPrice += item.price));
+            return totalPrice;
+          },
+          //专门基于list, 过滤出来的用于展示的数组
+          showList() {
+            // 应该要根据 key 进行过滤搜索
+            // filter中 return true表示保留该项, return false就是不保留,过滤掉
+            const arr = this.list.filter((item) => {
+              if (item.name.includes(this.key)) {
+                return true;
+              } else {
+                return false;
+              }
+            });
+            return arr;
           },
         },
       });
